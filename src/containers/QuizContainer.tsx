@@ -1,5 +1,8 @@
 import { useState, useRef } from 'react';
 import { useLoaderData } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { increment, reset } from '../redux/features/score/quizSlice';
+import { ScoreBox } from '../components/ScoreBox';
 import { getQuizData, blankQuizData } from '../util/movie-api';
 import { Poster, QuizData } from '../util/interfaces';
 import clsx from 'clsx';
@@ -12,14 +15,17 @@ export const QuizContainer = (): JSX.Element => {
   const [isQuizDataLoading, setIsQuizDataLoading] = useState(false);
   const [nextQuestionBtnText, setNextQuestionBtnText] = useState('');
   const nextQuestionData = useRef(blankQuizData);
+  const dispatch = useDispatch();
 
   const checkAnswer = (answer: string): void => {
     setIsAnswerCorrect(() => false);
 
     if (answer === quizData?.answer) {
       setIsAnswerCorrect(() => true);
+      dispatch(increment());
       setNextQuestionBtnText(() => 'Preparing next Question...');
     } else {
+      dispatch(reset());
       setNextQuestionBtnText(() => 'Preparing New Quiz...');
     }
   };
@@ -67,7 +73,8 @@ export const QuizContainer = (): JSX.Element => {
   }
 
   return (
-    <div className="tw-h-full tw-flex tw-flex-col tw-justify-center">
+    <div className="tw-h-full tw-flex tw-flex-col tw-justify-center tw-relative">
+      <ScoreBox />
       <div className="tw-flex tw-flex-wrap tw-my-auto">
         {quizData?.posters.map((poster: Poster, index: number) => {
           if (poster.url) {
@@ -106,7 +113,8 @@ export const QuizContainer = (): JSX.Element => {
         </div>
         <button
           className={
-            clsx('quiz__button',
+            clsx(
+              'quiz__button',
               !selectedAnswer && 'is-disabled',
               !isAnswerCorrect && selectedAnswer && 'is-wrong'
             )}

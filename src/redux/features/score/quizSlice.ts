@@ -1,25 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 export interface CounterState {
-  score: number
+  score: number;
+  previousScore: number;
 }
 
 const initialState: CounterState = {
   score: 0,
+  previousScore: 0,
 };
 
-export const scoreSlice = createSlice({
-  name: 'score',
+export const quizSlice = createSlice({
+  name: 'quiz',
   initialState,
   reducers: {
     increment: (state) => {
       state.score += 1;
     },
-    decrement: (state) => {
-      state.score -= 1;
+    reset: (state) => {
+      state.previousScore = state.score;
+      state.score = 0;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement } = scoreSlice.actions;
-export default scoreSlice.reducer;
+export const { increment, reset } = quizSlice.actions;
+export default quizSlice.reducer;

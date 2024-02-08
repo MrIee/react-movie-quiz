@@ -1,0 +1,5 @@
+.score-box__text {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+
+  @apply tw-absolute tw-top-10 tw-right-0 tw-text-2xl tw-text-white;
+}
