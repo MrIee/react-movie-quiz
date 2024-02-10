@@ -5,14 +5,14 @@ import '../assets/css/scoreBox.css';
 
 export const ScoreBox = (): JSX.Element => {
   const score = useSelector((state: RootState) => state.quiz.score);
-  const highScore = useSelector((state: RootState) => state.quiz.highScore);
+  const previousHighScore = useSelector((state: RootState) => state.quiz.previousHighScore);
 
   return (
     <div
       className={
         clsx(
           'score-box__text',
-          score > highScore && highScore > 0 &&'tw-text-green-600'
+          score > previousHighScore && previousHighScore > 0 &&'tw-text-green-600'
         )}
     >
       Score: {score}

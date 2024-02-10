@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { increment, reset } from '../redux/features/quiz/quizSlice';
+import { incrementScoreCorrect, incrementScoreWrong } from '../redux/features/quiz/quizSlice';
 import { ScoreBox } from '../components/ScoreBox';
 import { getQuizData, blankQuizData } from '../util/movie-api';
 import { Poster, QuizData } from '../util/interfaces';
@@ -18,24 +18,15 @@ export const QuizContainer = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const checkAnswer = (answer: string): void => {
-    setIsAnswerCorrect(() => false);
-
     if (answer === quizData?.answer) {
       setIsAnswerCorrect(() => true);
-      dispatch(increment());
-      setNextQuestionBtnText(() => 'Preparing next Question...');
+      dispatch(incrementScoreCorrect());
     } else {
-      dispatch(reset());
-      setNextQuestionBtnText(() => 'Preparing New Quiz...');
-    }
-  };
-
-  const getNextQuestionBtnText = (answer: string): string => {
-    if (answer === quizData?.answer) {
-      return 'Next Question';
+      setIsAnswerCorrect(() => false);
+      dispatch(incrementScoreWrong());
     }
 
-    return 'Try Again';
+    setNextQuestionBtnText(() => 'Preparing next Question...');
   };
 
   const onClickAnswer = async (answer: string): Promise<void> => {
@@ -45,7 +36,7 @@ export const QuizContainer = (): JSX.Element => {
       setIsQuizDataLoading(() => true);
       const data: QuizData = await getQuizData();
       nextQuestionData.current = data;
-      setNextQuestionBtnText(() => getNextQuestionBtnText(answer));
+      setNextQuestionBtnText('Next Question');
       setIsQuizDataLoading(() => false);
     }
   };
@@ -116,7 +107,6 @@ export const QuizContainer = (): JSX.Element => {
             clsx(
               'quiz__button',
               !selectedAnswer && 'is-disabled',
-              !isAnswerCorrect && selectedAnswer && 'is-wrong'
             )}
           onClick={() => generateNewQuestion()}
         >

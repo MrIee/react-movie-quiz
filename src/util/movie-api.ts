@@ -123,7 +123,7 @@ const getActorCredits = async (id: number): Promise<Array<Credit>> => {
   return [];
 };
 
-const generatePosterArray = (chosenMovie: Movie, credits: Array<Credit>, length: number): Array<Poster> => {
+const generatePosterArray = (chosenMovie: Movie, credits: Array<Credit>): Array<Poster> => {
   const posterSizes = { w92: 0, w154: 1, w185: 2, w342: 3, w500: 4, w780: 5, original: 6 };
   const dateLength: number = 4;
   const posters: Array<Poster> = [];
@@ -137,7 +137,7 @@ const generatePosterArray = (chosenMovie: Movie, credits: Array<Credit>, length:
   };
 
   credits.forEach((credit: Credit) => {
-    if (credit.poster_path && posters.length < length) {
+    if (credit.poster_path && posters.length < posterCount) {
       const url: string = credit.poster_path
         ? generatePosterURL(credit.poster_path)
         : '';
@@ -148,7 +148,7 @@ const generatePosterArray = (chosenMovie: Movie, credits: Array<Credit>, length:
     }
   });
 
-  const randomPosterIndex = Math.floor(Math.random() * length);
+  const randomPosterIndex = Math.floor(Math.random() * posterCount);
   const isChosenMovieInPosters = posters.some((poster: Poster) => poster.title.indexOf(chosenMovie?.title as string) > -1);
 
 
@@ -178,7 +178,7 @@ export const getQuizData = async (): Promise<QuizData> => {
   if (actorCredits.length < posterCount) {
     return await getQuizData();
   } else {
-    const posters: Array<Poster> = generatePosterArray(movieData, actorCredits, posterCount);
+    const posters: Array<Poster> = generatePosterArray(movieData, actorCredits);
 
     console.log('Answer:', randomCast.name);
     console.log('Options:', options);

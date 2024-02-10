@@ -1,13 +1,20 @@
-import { useState, MouseEvent } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../redux/store';
+import { setPreviousHighScore, resetScore } from '../redux/features/quiz/quizSlice';
 import '../assets/css/home.css';
 
 export const HomeContainer = (): JSX.Element => {
   const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
-  const highScore = useSelector((state: RootState) => state.quiz.highScore);
+  const highScore = useSelector((state: RootState) => state.quiz.previousHighScore);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    const score: string | 0 = localStorage.getItem('HIGH_SCORE') || 0;
+    dispatch(setPreviousHighScore(JSON.parse(score as string)));
+    dispatch(resetScore());
+  });
 
   const onClickStartQuiz = (e: MouseEvent<HTMLAnchorElement>): void => {
     if (isLoadingQuiz) {
