@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { increment, reset } from '../redux/features/score/quizSlice';
+import { increment, reset } from '../redux/features/quiz/quizSlice';
 import { ScoreBox } from '../components/ScoreBox';
 import { getQuizData, blankQuizData } from '../util/movie-api';
 import { Poster, QuizData } from '../util/interfaces';

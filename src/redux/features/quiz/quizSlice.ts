@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 export interface CounterState {
   score: number;
-  previousScore: number;
+  highScore: number;
 }
 
-const initialState: CounterState = {
+export const initialState: CounterState = {
   score: 0,
-  previousScore: 0,
+  highScore: 0,
 };
 
 export const quizSlice = createSlice({
@@ -17,7 +17,10 @@ export const quizSlice = createSlice({
       state.score += 1;
     },
     reset: (state) => {
-      state.previousScore = state.score;
+      if (state.score > state.highScore) {
+        state.highScore = state.score;
+      }
+
       state.score = 0;
     },
   },
