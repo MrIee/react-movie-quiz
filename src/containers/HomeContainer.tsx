@@ -27,13 +27,18 @@ export const HomeContainer = (): JSX.Element => {
   return (
     <div className="tw-w-full tw-flex tw-flex-col tw-items-center tw-mt-10">
       <h1 className="tw-mb-8">Movie Quiz</h1>
-      <div className="tw-flex tw-flex-col tw-items-center">
-        <p className="tw-py-3">
+      <div className="home__quiz-description">
+        <p className="tw-mb-3">Can you tell which actor starred in all 5 movies?</p>
+        <p className="tw-mb-3">
           Each question has 5 random movie posters and 4 actors to chose from.
         </p>
-        <p className="tw-pb-3">Can you tell which actor starred in all 5 movies?</p>
-        <strong className="tw-inline-block tw-mb-3 tw-text-lg">High Score: {highScore}</strong>
-        <NavLink className="menu__button" to="/quiz" onClick={(e) => onClickStartQuiz(e)}>
+        <p className="tw-mb-3">
+          Unlike most quizzes, this one doesn't end. Keep going and score the highest points you can!
+          For each question you get right, you will score 2 points. Each incorrect guess will simply
+          deduct 1 point from your score and you cannot go below 0. Have fun!
+        </p>
+        <strong className="tw-self-center tw-mb-3 tw-text-lg">High Score: {highScore}</strong>
+        <NavLink className="home__button" to="/quiz" onClick={(e) => onClickStartQuiz(e)}>
           { isLoadingQuiz ? 'Loading Quiz...' : 'Start' }
         </NavLink>
       </div>

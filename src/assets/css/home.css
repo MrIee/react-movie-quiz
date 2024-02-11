@@ -1,7 +1,14 @@
-a.menu__button {
+.home__quiz-description {
+  width: 500px;
+
+  @apply tw-flex tw-flex-col;
+}
+
+a.home__button {
   box-shadow: 0px 0px 0px 2px rgb(31, 41, 55) inset;
 
   @apply tw-w-56
+  tw-self-center
   tw-py-5
   tw-mb-3
   tw-text-center
@@ -11,17 +18,13 @@ a.menu__button {
   tw-relative;
 }
 
-a.menu__button:disabled {
-
-}
-
-a.menu__button:hover {
+a.home__button:hover {
   box-shadow: 0px 0px 0px 3px rgb(31, 41, 55) inset;
 
   @apply tw-font-bold tw-tracking-normal;
 }
 
-a.menu__button:active::after {
+a.home__button:active::after {
   content: '';
 
   @apply tw-absolute tw-top-0 tw-left-0 tw-h-full tw-w-full tw-bg-black tw-opacity-15;

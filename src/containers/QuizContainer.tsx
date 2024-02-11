@@ -13,7 +13,7 @@ export const QuizContainer = (): JSX.Element => {
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [quizData, setQuizData] = useState(useLoaderData() as QuizData);
   const [isQuizDataLoading, setIsQuizDataLoading] = useState(false);
-  const [nextQuestionBtnText, setNextQuestionBtnText] = useState('');
+  const [nextQuestionBtnText, setNextQuestionBtnText] = useState('Next Question');
   const nextQuestionData = useRef(blankQuizData);
   const dispatch = useDispatch();
 
@@ -54,12 +54,11 @@ export const QuizContainer = (): JSX.Element => {
   }
 
   const generateNewQuestion = (): void => {
-    if (isQuizDataLoading) {
+    if (isQuizDataLoading || !selectedAnswer) {
       return;
     }
 
     setSelectedAnswer(() => '');
-    setNextQuestionBtnText(() => '');
     setQuizData(() => nextQuestionData.current);
   }
 
