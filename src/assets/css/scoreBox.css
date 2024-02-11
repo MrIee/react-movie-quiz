@@ -1,5 +1,11 @@
 .score-box__text {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 
-  @apply tw-absolute tw-top-10 tw-right-0 tw-text-2xl tw-text-white;
+  @apply tw-text-right tw-mt-3 xl:tw-mt-10 tw-mr-5 tw-mb-3 tw-text-xl md:tw-text-2xl tw-text-white;
+}
+
+@media (min-width: 1346px) {
+  .score-box__text {
+    @apply tw-mr-0;
+  }
 }

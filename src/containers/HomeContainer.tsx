@@ -26,7 +26,7 @@ export const HomeContainer = (): JSX.Element => {
 
   return (
     <div className="tw-w-full tw-flex tw-flex-col tw-items-center tw-mt-10">
-      <h1 className="tw-mb-8">Movie Quiz</h1>
+      <h1 className="tw-mb-8 tw-text-center">Movie Quiz</h1>
       <div className="home__quiz-description">
         <p className="tw-mb-3">Can you tell which actor starred in all 5 movies?</p>
         <p className="tw-mb-3">

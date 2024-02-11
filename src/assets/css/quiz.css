@@ -1,13 +1,27 @@
 .quiz__poster {
-  width: calc(20% - 24px);
-  max-width: 250px;
+  max-width: calc(34% - 24px);
 
   @apply tw-flex-grow
-  tw-mx-3
-  tw-mb-6
-  first-of-type:tw-ml-0
-  last-of-type:tw-mr-0
+  tw-mx-1.5
+  md:tw-mx-3
+  tw-mb-3
+  md:tw-mb-6
+  md:first-of-type:tw-ml-0
+  md:last-of-type:tw-mr-0
   tw-text-center;
+}
+
+@media (min-width: 768px) {
+  .quiz__poster {
+    max-width: calc(30% - 24px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .quiz__poster {
+    width: calc(20% - 24px);
+    max-width: 250px;
+  }
 }
 
 .quiz__poster--loading {
@@ -23,22 +37,38 @@
 }
 
 .quiz__options-container {
-  width: 1346px;
-
-  @apply tw-h-72
+  @apply tw-h-40
+  md:tw-h-56
+  tw-w-full
   tw-border-4
   tw-border-gray-800
   tw-rounded-full
   tw-overflow-hidden;
 }
 
+@media (min-width: 1024px) {
+  .quiz__options-container {
+    max-width: 1346px;
+
+    @apply tw-h-72;
+  }
+}
+
+.quiz__option,
+.quiz__button {
+  @apply tw-flex
+  tw-items-center
+  tw-justify-center
+  tw-p-2
+  lg:tw-p-4
+  md:tw-text-2xl
+  lg:tw-text-3xl
+}
+
 .quiz__option {
   @apply tw-h-1/2
   tw-w-1/2
-  tw-flex
-  tw-items-center
-  tw-justify-center
-  tw-text-3xl
+  max-sm:tw-text-sm
   tw-bg-white
   tw-bg-opacity-75
   [&:nth-child(1)]:tw-border-b-4
@@ -68,10 +98,6 @@
 
   @apply tw-h-1/3
   tw-w-full
-  tw-flex
-  tw-justify-center
-  tw-items-center
-  tw-text-3xl
   tw-border-t-4
   tw-border-gray-800
   tw-bg-opacity-75

@@ -65,7 +65,7 @@ export const QuizContainer = (): JSX.Element => {
   return (
     <div className="tw-h-full tw-flex tw-flex-col tw-justify-center tw-relative">
       <ScoreBox />
-      <div className="tw-flex tw-flex-wrap tw-my-auto">
+      <div className="tw-flex tw-justify-center tw-flex-wrap tw-my-auto">
         {quizData?.posters.map((poster: Poster, index: number) => {
           if (poster.url) {
             return (

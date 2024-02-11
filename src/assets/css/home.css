@@ -1,7 +1,13 @@
 .home__quiz-description {
-  width: 500px;
+  background: rgba(255, 255, 255, 0.2);
 
-  @apply tw-flex tw-flex-col;
+  @apply tw-flex tw-flex-col tw-p-5 sm:tw-p-0 tw-mx-5 sm:tw-mx-0 tw-rounded-lg sm:tw-bg-transparent;
+}
+
+@media (min-width: 640px) {
+  .home__quiz-description {
+    width: 640px;
+  }
 }
 
 a.home__button {
@@ -10,7 +16,6 @@ a.home__button {
   @apply tw-w-56
   tw-self-center
   tw-py-5
-  tw-mb-3
   tw-text-center
   tw-text-2xl
   tw-tracking-wide

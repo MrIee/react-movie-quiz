@@ -12,7 +12,7 @@ export const ScoreBox = (): JSX.Element => {
       className={
         clsx(
           'score-box__text',
-          score > previousHighScore && previousHighScore > 0 &&'tw-text-green-600'
+          score > previousHighScore && previousHighScore > 0 &&'tw-text-green-500'
         )}
     >
       Score: {score}

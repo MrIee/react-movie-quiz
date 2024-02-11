@@ -45,6 +45,10 @@ const getConfig = async (): Promise<Config | null> => {
 
 const config: Config | null = await getConfig();
 
+console.log('I SEE YOU!');
+console.log('NO CHEATING!!!');
+console.log("These logs are totally [still] only here for legitimate, non-cheaty, debugging purposes... ^_^'")
+
 const getDetailsOfRandomMovie = async (): Promise<Movie> => {
   const maxPageCount = 5;
   const pageSize = 20;
