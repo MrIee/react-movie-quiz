@@ -32,6 +32,12 @@ const statusSuccess = 200;
 const castCount: number = 4;
 const posterCount: number = 4;
 
+let config: Config | null = null;
+
+console.log('I SEE YOU!');
+console.log('NO CHEATING!!!');
+console.log("These logs are totally [still] only here for legitimate, non-cheaty, debugging purposes... ^_^'")
+
 const getConfig = async (): Promise<Config | null> => {
   const res: AxiosResponse = await axios.get(`${baseURL}/configuration`, {
     params: { api_key },
@@ -43,12 +49,6 @@ const getConfig = async (): Promise<Config | null> => {
     return null;
   }
 };
-
-const config: Config | null = await getConfig();
-
-console.log('I SEE YOU!');
-console.log('NO CHEATING!!!');
-console.log("These logs are totally [still] only here for legitimate, non-cheaty, debugging purposes... ^_^'")
 
 const getDetailsOfRandomMovie = async (): Promise<Movie> => {
   const maxPageCount = 5;
@@ -180,6 +180,7 @@ const generatePosterArray = (chosenMovie: Movie, credits: Array<Credit>): Array<
 };
 
 export const getQuizData = async (): Promise<QuizData> => {
+  config = await getConfig();
   const movieData: Movie = await getDetailsOfRandomMovie();
 
   if (!movieData) {
