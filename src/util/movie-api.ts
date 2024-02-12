@@ -17,10 +17,11 @@ interface Credit {
   poster_path: string;
   title: string;
   release_date: string;
+  popularity: number;
 }
 
 interface MovieDetail extends Credit {
-  id: number,
+  id: number;
 }
 
 type Movie = MovieDetail | null;
@@ -29,7 +30,7 @@ const api_key = '66fe0a2e16a8aa847afb6fcf8a9eb750';
 const baseURL = 'https://api.themoviedb.org/3';
 const statusSuccess = 200;
 const castCount: number = 4;
-const posterCount: number = 5;
+const posterCount: number = 4;
 
 const getConfig = async (): Promise<Config | null> => {
   const res: AxiosResponse = await axios.get(`${baseURL}/configuration`, {
@@ -82,12 +83,14 @@ const getDetailsOfRandomMovie = async (): Promise<Movie> => {
   if (status === statusSuccess) {
     const randomMovie = data.results[randomMovieIndex];
     console.log('==================================');
-    console.log('Movie name:', `${randomMovie.title} (${randomMovie.release_date.slice(0, 4)})`)
+    console.log('Movie name:', `${randomMovie.title} (${randomMovie.release_date.slice(0, 4)})`);
+
     return {
       id: randomMovie.id,
       poster_path: randomMovie.poster_path,
       title: randomMovie.title,
       release_date: randomMovie.release_date,
+      popularity: randomMovie.popularity,
     };
   }
 
@@ -113,7 +116,7 @@ const getMovieCast = async (id: number | undefined): Promise<Array<Actor>> => {
   return [];
 };
 
-const getActorCredits = async (id: number): Promise<Array<Credit>> => {
+const getActorCreditsSorted = async (id: number): Promise<Array<Credit>> => {
   const res: AxiosResponse = await axios.get(`${baseURL}/person/${id}/movie_credits`, {
     params: { api_key },
   });
@@ -121,7 +124,17 @@ const getActorCredits = async (id: number): Promise<Array<Credit>> => {
   const { status, data } = res;
 
   if (status === 200) {
-    return data.cast;
+    const creditsSorted = data.cast.sort((a: Credit, b: Credit) => {
+      if (a.popularity > b.popularity) {
+        return -1;
+      } else if (b.popularity > a.popularity) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    return creditsSorted;
   }
 
   return [];
@@ -177,7 +190,7 @@ export const getQuizData = async (): Promise<QuizData> => {
   const randomCastIndex: number = Math.floor(Math.random() * castCount);
   const randomCast: Actor = movieCast[randomCastIndex];
   const options: Array<string> = movieCast.slice(0, castCount).map((actor: Actor) => actor.name);
-  const actorCredits: Array<Credit> = await getActorCredits(randomCast.id);
+  const actorCredits: Array<Credit> = await getActorCreditsSorted(randomCast.id);
 
   if (actorCredits.length < posterCount) {
     return await getQuizData();

@@ -1,32 +1,32 @@
-.quiz__poster {
-  max-width: calc(34% - 24px);
+.quiz__poster,
+.quiz__options-container {
+  @apply tw-mx-1.5 md:tw-mx-3;
+}
 
-  @apply tw-flex-grow
-  tw-mx-1.5
-  md:tw-mx-3
-  tw-mb-3
-  md:tw-mb-6
-  md:first-of-type:tw-ml-0
-  md:last-of-type:tw-mr-0
-  tw-text-center;
+.quiz__poster {
+  max-width: calc(43% - 24px);
+
+  @apply tw-mb-3 md:tw-mb-6;
 }
 
 @media (min-width: 768px) {
   .quiz__poster {
-    max-width: calc(30% - 24px);
+    max-width: calc(25% - 24px);
   }
 }
 
 @media (min-width: 1024px) {
   .quiz__poster {
-    width: calc(20% - 24px);
-    max-width: 250px;
+    width: calc(25% - 24px);
+    max-width: 300px;
   }
 }
 
 .quiz__poster--loading {
   border-style: inset;
-  @apply tw-p-8
+
+  @apply tw-self-center
+  tw-p-8
   tw-text-center
   tw-text-2xl
   tw-font-bold
@@ -40,9 +40,12 @@
   @apply tw-h-40
   md:tw-h-56
   tw-w-full
+  max-md:tw-mx-0
+  tw-self-center
   tw-border-4
   tw-border-gray-800
-  tw-rounded-full
+  tw-rounded-2xl
+  md:tw-rounded-full
   tw-overflow-hidden;
 }
 
@@ -68,7 +71,6 @@
 .quiz__option {
   @apply tw-h-1/2
   tw-w-1/2
-  max-sm:tw-text-sm
   tw-bg-white
   tw-bg-opacity-75
   [&:nth-child(1)]:tw-border-b-4

@@ -67,24 +67,21 @@ export const QuizContainer = (): JSX.Element => {
       <ScoreBox />
       <div className="tw-flex tw-justify-center tw-flex-wrap tw-my-auto">
         {quizData?.posters.map((poster: Poster, index: number) => {
-          if (poster.url) {
-            return (
+          return poster.url ? (
+            <div key={index} className="quiz__poster">
               <img
                 key={index}
-                className="quiz__poster"
                 src={poster.url}
                 alt={poster.title}
               />
-            )
-          }
-
-          return (
+            </div>
+          ) : (
             <div key={index} className="quiz__poster quiz__poster--loading">
               <span className="tw-inline-block tw-mb-4">{poster.title}</span>
               <span>Poster Unavailable</span>
             </div>
           )
-        })}
+      })}
       </div>
       <div className={ clsx('quiz__options-container', isQuizDataLoading && 'is-loading')}>
         <div className="tw-h-2/3 tw-w-full tw-flex tw-flex-wrap">

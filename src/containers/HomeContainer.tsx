@@ -28,9 +28,9 @@ export const HomeContainer = (): JSX.Element => {
     <div className="tw-w-full tw-flex tw-flex-col tw-items-center tw-mt-10">
       <h1 className="tw-mb-8 tw-text-center">Movie Quiz</h1>
       <div className="home__quiz-description">
-        <p className="tw-mb-3">Can you tell which actor starred in all 5 movies?</p>
+        <p className="tw-mb-3">Can you tell which actor starred in all 4 movies?</p>
         <p className="tw-mb-3">
-          Each question has 5 random movie posters and 4 actors to chose from.
+          Each question has 4 random movie posters and 4 actors to chose from.
         </p>
         <p className="tw-mb-3">
           Unlike most quizzes, this one doesn't end. Keep going and score the highest points you can!
