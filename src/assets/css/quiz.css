@@ -66,6 +66,7 @@
   lg:tw-p-4
   md:tw-text-2xl
   lg:tw-text-3xl
+  tw-text-center;
 }
 
 .quiz__option {
