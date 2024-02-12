@@ -1,0 +1,18 @@
+.footer {
+  @apply tw-w-full
+  tw-hidden
+  sm:tw-flex
+  tw-justify-center
+  tw-fixed
+  tw-bottom-0
+  tw-z-10
+  tw-px-4
+  tw-py-1.5
+  sm:tw-px-0
+  tw-text-white
+  tw-bg-gray-800;
+}
+
+.footer a {
+  @apply tw-underline;
+}
