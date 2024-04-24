@@ -65,6 +65,11 @@ export const QuizContainer = (): JSX.Element => {
   return (
     <div className="tw-h-full tw-flex tw-flex-col tw-justify-center tw-relative">
       <ScoreBox />
+      {
+        quizData?.title ? (
+          <h2 className="tw-text-center">{quizData.title}</h2>
+        ) : null
+      }
       <div className="tw-flex tw-justify-center tw-flex-wrap tw-my-auto">
         {quizData?.posters.map((poster: Poster, index: number) => {
           return poster.url ? (
@@ -74,6 +79,7 @@ export const QuizContainer = (): JSX.Element => {
                 src={poster.url}
                 alt={poster.title}
               />
+              <div className="tw-text-center tw-text-white tw-mt-2">{poster.title}</div>
             </div>
           ) : (
             <div key={index} className="quiz__poster quiz__poster--loading">

@@ -11,9 +11,11 @@ interface Config {
 interface Actor {
   id: number,
   name: string,
+  profile_path: string,
 }
 
 interface Credit {
+  id: number,
   poster_path: string;
   title: string;
   release_date: string;
@@ -29,6 +31,7 @@ type Movie = MovieDetail | null;
 const api_key = '66fe0a2e16a8aa847afb6fcf8a9eb750';
 const baseURL = 'https://api.themoviedb.org/3';
 const statusSuccess = 200;
+const posterSizes = { w92: 0, w154: 1, w185: 2, w342: 3, w500: 4, w780: 5, original: 6 };
 const castCount: number = 4;
 const posterCount: number = 4;
 
@@ -37,6 +40,10 @@ let config: Config | null = null;
 console.log('I SEE YOU!');
 console.log('NO CHEATING!!!');
 console.log("These logs are totally [still] only here for legitimate, non-cheaty, debugging purposes... ^_^'")
+
+const getRandomNumberFromRange = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
 
 const getConfig = async (): Promise<Config | null> => {
   const res: AxiosResponse = await axios.get(`${baseURL}/configuration`, {
@@ -50,6 +57,15 @@ const getConfig = async (): Promise<Config | null> => {
   }
 };
 
+const generateMovieTitle = (title: string, releaseDate: string): string => {
+  const dateLength: number = 4;
+  return `${title} (${releaseDate.slice(0, dateLength)})`;
+};
+
+const generatePosterURL = (posterPath: string, posterSize: string): string => {
+  return `${config?.base_url}${posterSize}${posterPath}`
+};
+
 const getDetailsOfRandomMovie = async (): Promise<Movie> => {
   const maxPageCount = 5;
   const pageSize = 20;
@@ -61,7 +77,7 @@ const getDetailsOfRandomMovie = async (): Promise<Movie> => {
   const runTime = 60;
   const minYear = 1990;
   const maxYear = new Date().getFullYear() - 1;
-  const releaseYear = Math.floor(Math.random() * (maxYear - minYear + 1) + minYear);
+  const releaseYear = getRandomNumberFromRange(minYear, maxYear);
 
   const res: AxiosResponse = await axios.get(`${baseURL}/discover/movie`, {
     params: {
@@ -82,13 +98,14 @@ const getDetailsOfRandomMovie = async (): Promise<Movie> => {
 
   if (status === statusSuccess) {
     const randomMovie = data.results[randomMovieIndex];
+    const title = generateMovieTitle(randomMovie.title, randomMovie.release_date);
     console.log('==================================');
-    console.log('Movie name:', `${randomMovie.title} (${randomMovie.release_date.slice(0, 4)})`);
+    console.log('Movie name:', title);
 
     return {
       id: randomMovie.id,
       poster_path: randomMovie.poster_path,
-      title: randomMovie.title,
+      title,
       release_date: randomMovie.release_date,
       popularity: randomMovie.popularity,
     };
@@ -108,8 +125,6 @@ const getMovieCast = async (id: number | undefined): Promise<Array<Actor>> => {
   if (status === 200) {
     if (data.cast.length >= minCastCount) {
       return data.cast;
-    } else {
-      getQuizData();
     }
   }
 
@@ -141,22 +156,12 @@ const getActorCreditsSorted = async (id: number): Promise<Array<Credit>> => {
 };
 
 const generatePosterArray = (chosenMovie: Movie, credits: Array<Credit>): Array<Poster> => {
-  const posterSizes = { w92: 0, w154: 1, w185: 2, w342: 3, w500: 4, w780: 5, original: 6 };
-  const dateLength: number = 4;
   const posters: Array<Poster> = [];
-
-  const generatePosterURL = (posterPath: string): string => {
-    return `${config?.base_url}${config?.poster_sizes[posterSizes.w342]}${posterPath}`
-  };
-
-  const generateMovieTitle = (title: string, releaseDate: string): string => {
-    return `${title} (${releaseDate.slice(0, dateLength)})`;
-  };
 
   credits.forEach((credit: Credit) => {
     if (credit.poster_path && posters.length < posterCount) {
       const url: string = credit.poster_path
-        ? generatePosterURL(credit.poster_path)
+        ? generatePosterURL(credit.poster_path, config?.poster_sizes[posterSizes.w342] as string)
         : '';
 
       const title = generateMovieTitle(credit.title, credit.release_date);
@@ -171,8 +176,8 @@ const generatePosterArray = (chosenMovie: Movie, credits: Array<Credit>): Array<
 
   if (!isChosenMovieInPosters) {
     posters[randomPosterIndex] = {
-      url: generatePosterURL(chosenMovie?.poster_path as string),
-      title: generateMovieTitle(chosenMovie?.title as string, chosenMovie?.release_date as string),
+      url: generatePosterURL(chosenMovie?.poster_path as string, config?.poster_sizes[posterSizes.w342] as string),
+      title: chosenMovie?.title as string,
     };
   }
 
@@ -187,7 +192,12 @@ export const getQuizData = async (): Promise<QuizData> => {
     return null;
   }
 
-  const movieCast: Array<Actor> = await getMovieCast(movieData?.id);
+  const movieCast: Array<Actor> = await getMovieCast(movieData.id);
+
+  if (movieCast.length === 0) {
+    return null;
+  }
+
   const randomCastIndex: number = Math.floor(Math.random() * castCount);
   const randomCast: Actor = movieCast[randomCastIndex];
   const options: Array<string> = movieCast.slice(0, castCount).map((actor: Actor) => actor.name);
@@ -200,7 +210,6 @@ export const getQuizData = async (): Promise<QuizData> => {
 
     console.log('Answer:', randomCast.name);
     console.log('Options:', options);
-    console.log('Posters:', posters);
     console.log('==================================');
 
     return {
@@ -225,5 +234,64 @@ const getBlankQuizData = (): QuizData => {
 
   return { answer: '', options, posters };
 };
+
+const getRandomCastMember = async (actorId: number, movieId: number, cast: Array<Actor>): Promise<Actor> => {
+  const actorCredits: Array<Credit> = await getActorCreditsSorted(actorId);
+  let movieDetails: Credit | null = null;
+
+  if (movieId) {
+    const credits = actorCredits.filter((credit: Credit) => credit.id !== movieId);
+    const randomCreditIndex = getRandomNumberFromRange(0, credits.length - 1);
+    movieDetails = credits[randomCreditIndex];
+  } else {
+    const randomCreditIndex = getRandomNumberFromRange(0, actorCredits.length - 1);
+    movieDetails = actorCredits[randomCreditIndex];
+  }
+
+  const movieCast: Array<Actor> = await getMovieCast(movieDetails.id);
+  const actorIds: Array<number> = cast.map((actor: Actor) => actor.id);
+  const movieCastFiltered: Array<Actor> = movieCast.filter((actor: Actor) => actorIds.indexOf(actor.id) === -1);
+  const randomCastIndex = getRandomNumberFromRange(0, movieCastFiltered.length - 1);
+  const randomCast: Actor = movieCastFiltered[randomCastIndex];
+  return randomCast;
+};
+
+export const getMissingCastMemberQuiz = async (): Promise<QuizData> => {
+  config = await getConfig();
+  const movieData: Movie = await getDetailsOfRandomMovie();
+
+  if (!movieData) {
+    return null;
+  }
+
+  const movieCast: Array<Actor> = await getMovieCast(movieData.id);
+  const actors: Array<Actor> = movieCast.slice(0, castCount + 1)
+  const randomCastIndex: number = Math.floor(Math.random() * castCount);
+  const answer: Actor = actors[randomCastIndex];
+  actors.splice(randomCastIndex, 1);
+  const options = new Array<Actor>;
+  for (let i = 0; i < castCount - 1; i++) {
+    const randomCast: Actor = await getRandomCastMember(actors[i].id, movieData.id, actors);
+    options.push(randomCast);
+  }
+  options.push(answer);
+  const posters = actors.map((actor: Actor) => ({
+    url: generatePosterURL(actor.profile_path, config?.poster_sizes[posterSizes.w342] as string),
+    title: actor.name,
+  }));
+  const formattedOptions = options.map((actor: Actor) => actor.name);
+
+  console.log('options:', options);
+  console.log('answer:', answer.name);
+  console.log('==================================');
+
+  return {
+    title: movieData.title,
+    answer: answer.name,
+    options: shuffle(formattedOptions),
+    posters,
+  };
+};
+
 
 export const blankQuizData: QuizData = getBlankQuizData();

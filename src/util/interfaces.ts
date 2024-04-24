@@ -4,6 +4,7 @@ export interface Poster {
 }
 
 export interface Quiz {
+  title?: string;
   answer: string;
   options: Array<string>;
   posters: Array<Poster>;
