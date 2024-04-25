@@ -220,21 +220,6 @@ export const getQuizData = async (): Promise<QuizData> => {
   }
 }
 
-const getBlankQuizData = (): QuizData => {
-  const options: Array<string> = [];
-  const posters: Array<Poster> = [];
-
-  for (let i = 0; i < castCount; i++) {
-    options.push('');
-  }
-
-  for (let i = 0; i < posterCount; i++) {
-    posters.push({ url: '', title: '' });
-  }
-
-  return { answer: '', options, posters };
-};
-
 const getRandomCastMember = async (actorId: number, movieId: number, cast: Array<Actor>): Promise<Actor> => {
   const actorCredits: Array<Credit> = await getActorCreditsSorted(actorId);
   let movieDetails: Credit | null = null;
@@ -256,7 +241,7 @@ const getRandomCastMember = async (actorId: number, movieId: number, cast: Array
   return randomCast;
 };
 
-export const getMissingCastMemberQuiz = async (): Promise<QuizData> => {
+export const getMissingCastMemberQuizData = async (): Promise<QuizData> => {
   config = await getConfig();
   const movieData: Movie = await getDetailsOfRandomMovie();
 
@@ -292,6 +277,3 @@ export const getMissingCastMemberQuiz = async (): Promise<QuizData> => {
     posters,
   };
 };
-
-
-export const blankQuizData: QuizData = getBlankQuizData();

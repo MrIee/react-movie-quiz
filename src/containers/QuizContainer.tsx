@@ -3,18 +3,17 @@ import { useLoaderData } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { incrementScoreCorrect, incrementScoreWrong } from '../redux/features/quiz/quizSlice';
 import { ScoreBox } from '../components/ScoreBox';
-import { getQuizData, blankQuizData } from '../util/movie-api';
 import { Poster, QuizData } from '../util/interfaces';
 import clsx from 'clsx';
 import '../assets/css/quiz.css';
 
-export const QuizContainer = (): JSX.Element => {
+export const QuizContainer = ({ loadQuizData = async (): Promise<QuizData> => (await {} as QuizData) }): JSX.Element => {
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [quizData, setQuizData] = useState(useLoaderData() as QuizData);
   const [isQuizDataLoading, setIsQuizDataLoading] = useState(false);
   const [nextQuestionBtnText, setNextQuestionBtnText] = useState('Next Question');
-  const nextQuestionData = useRef(blankQuizData);
+  const nextQuestionData = useRef({} as QuizData);
   const dispatch = useDispatch();
 
   const checkAnswer = (answer: string): void => {
@@ -34,7 +33,7 @@ export const QuizContainer = (): JSX.Element => {
       setSelectedAnswer(() => answer);
       checkAnswer(answer);
       setIsQuizDataLoading(() => true);
-      const data: QuizData = await getQuizData();
+      const data: QuizData = await loadQuizData();
       nextQuestionData.current = data;
       setNextQuestionBtnText('Next Question');
       setIsQuizDataLoading(() => false);
